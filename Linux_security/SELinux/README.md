@@ -1,7 +1,19 @@
-## A sysadmin's guide to SELinux: 42 answers to the big questions
+### SELinux Tutorial
+
+SELinux is a mandatory access control (MAC) module residing in the kernel level of linux systems.
+It’s a joint development of Redhat and NSA released around 1998 and still being maintained by an
+enthusiast community. SeLinux is known to be quite secure due to the involvement of a government
+agency. SELinux is an open source application which protects the host by isolating each application
+and confining its activities. By default, processes are blocked from doing any activities unless
+the explicit permission is granted. The module natively provides two global level management rules:
+Permissive and Enforcing which respectively logs each violated rule, and denies access to a
+particular request sent from a process.
+
+### A sysadmin's guide to SELinux: 42 answers to the big questions
 https://opensource.com/article/18/7/sysadmin-guide-selinux
 
-Get answers to the big questions about life, the universe, and everything else about Security-Enhanced Linux.
+Get answers to the big questions about life, the universe, and everything else about Security-Enhanced
+Linux.
 
 Security. Hardening. Compliance. Policy. The Four Horsemen of the SysAdmin Apocalypse. In
 addition to our daily tasks—monitoring, backup, implementation, tuning, updating, and so
@@ -498,3 +510,7 @@ http://blog.linuxgrrl.com/2014/04/16/the-selinux-coloring-book/
 SELinux User's and Administrator's Guide
 
 https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/selinux_users_and_administrators_guide/index?extIdCarryOver=true&sc_cid=701f2000001OH7nAAG
+
+SELinux on Ubuntu Tutorial
+
+https://linuxhint.com/selinux-on-ubuntu-tutorial/
