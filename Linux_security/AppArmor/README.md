@@ -7,4 +7,10 @@ paths. AppArmor supplements the traditional Unix discretionary access control (D
 mandatory access control (MAC). It has been included in the mainline Linux kernel since version 2.6.36
 and its development has been supported by Canonical since 2009. 
 
-To Be Continued
+### How To Install "apparmor" Package on Ubuntu
+
+	$ sudo apt-get update -y
+	$ sudo apt-get install -y apparmor
+	$ sudo apt-get install -y apparmor-utils (optional)
+
+Check the system logs to confirm that there are no related errors.

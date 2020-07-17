@@ -1,0 +1,20 @@
+[root@localhost ~]# service sshd status
+Redirecting to /bin/systemctl status  sshd.service
+● sshd.service - OpenSSH server daemon
+   Loaded: loaded (/usr/lib/systemd/system/sshd.service; disabled; vendor preset: disabled)
+   Active: inactive (dead)
+     Docs: man:sshd(8)
+           man:sshd_config(5)
+[root@localhost ~]# chkconfig sshd on
+Note: Forwarding request to 'systemctl enable sshd.service'.
+Created symlink from /etc/systemd/system/multi-user.target.wants/sshd.service to /usr/lib/systemd/system/sshd.service.
+[root@localhost ~]# service sshd status
+Redirecting to /bin/systemctl status  sshd.service
+● sshd.service - OpenSSH server daemon
+   Loaded: loaded (/usr/lib/systemd/system/sshd.service; enabled; vendor preset: disabled)
+   Active: inactive (dead)
+     Docs: man:sshd(8)
+           man:sshd_config(5)
+[root@localhost ~]# service sshd start
+Redirecting to /bin/systemctl start  sshd.service
+[root@localhost ~]#

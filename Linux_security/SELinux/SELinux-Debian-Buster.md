@@ -669,4 +669,3 @@ for more tips and updates on Linux and networking.
 SELinux on Ubuntu Tutorial
 
 https://linuxhint.com/selinux-on-ubuntu-tutorial/
-
