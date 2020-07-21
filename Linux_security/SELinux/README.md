@@ -401,7 +401,7 @@ To disable all permissive domains:
 
 ### 33
 
-Enabling SELinux MLS policy: # yum install selinux-policy-mls
+Enabling SELinux MLS policy: # dnf install selinux-policy-mls
 
 	In /etc/selinux/config:
 	SELINUX=permissive

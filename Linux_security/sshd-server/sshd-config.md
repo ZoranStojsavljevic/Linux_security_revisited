@@ -1,10 +1,15 @@
 ## SSHD Service
 
+### Including PAM (Pluggable Authentication Modules) libraries while compiling/making sshd
+
+	$ ./configure --prefix=/opt --enable-pam --with-pam
+	$ make
+	$ sudo make install
+
 ### sshd.service directory
 
-File /etc/systemd/system//etc/systemd/system
-
-sshd.service -> /lib/systemd/system/ssh.service
+	File /etc/systemd/system/sshd.service
+	sshd.service -> /lib/systemd/system/ssh.service
 
 #### sshd.service example 1
 
@@ -51,3 +56,13 @@ sshd.service -> /lib/systemd/system/ssh.service
 	[Install]
 	WantedBy=multi-user.target
 	Alias=sshd.service
+
+### Some specific problems with sshd service?!
+
+Type of the service could cause the problem... So far, three types of service are known by me:
+
+	Type=forking
+	Type=simple
+	Type=notify
+
+https://lists.yoctoproject.org/g/yocto/message/49991
