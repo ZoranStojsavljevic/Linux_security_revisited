@@ -45,8 +45,8 @@ The correct Label format is user:role:type:level (optional).
 
 ### 4
 
-The purpose of Multi-Level Security (MLS) enforcement is to control processes (domains) based on
-the security level of the data they will be using. For example, a secret process cannot read
+The purpose of Multi-Level Security (MLS) enforcement is to control processes (domains) based
+on the security level of the data they will be using. For example, a secret process cannot read
 top-secret data.
 
 ### 5
@@ -99,6 +99,7 @@ SELinux status tool:
 	Policy deny_unknown status:	allowed
 	Memory protection checking:	actual (secure)
 	Max kernel policy version:	32
+
 	[vuser@fedora32-ssd tftpboot]$ mount | grep selinux
 	selinuxfs on /sys/fs/selinux type selinuxfs (rw,relatime)
 	[vuser@fedora32-ssd tftpboot]
@@ -107,12 +108,28 @@ SELinux status tool:
 
 Configuration file: /etc/selinux/config
 
+#### Fedora32 /etc/selinux/config example
+
+	[vuser@fedora32-ssd ~]$ cat /etc/selinux/config
+
+	# This file controls the state of SELinux on the system.
+	# SELINUX= can take one of these three values:
+	#     enforcing - SELinux security policy is enforced.
+	#     permissive - SELinux prints warnings instead of enforcing.
+	#     disabled - No SELinux policy is loaded.
+	SELINUX=enforcing
+	# SELINUXTYPE= can take one of these three values:
+	#     targeted - Targeted processes are protected,
+	#     minimum - Modification of targeted policy. Only selected processes are protected.
+	#     mls - Multi Level Security protection.
+	SELINUXTYPE=targeted
+
 ### 12
 
 How does SELinux work? Here's an example of labeling for an Apache Web Server:
 
-	Binary: /usr/sbin/httpd→httpd_exec_t
-	Configuration directory: /etc/httpd→httpd_config_t
+	Binary: /usr/sbin/httpd → httpd_exec_t
+	Configuration directory: /etc/httpd → httpd_config_t
 	Logfile directory: /var/log/httpd → httpd_log_t
 	Content directory: /var/www/html → httpd_sys_content_t
 	Startup script: /usr/lib/systemd/system/httpd.service → httpd_unit_file_d
@@ -306,6 +323,44 @@ SELinux tools for the development of policy modules:
 
 Reboot or restart auditd after you install.
 
+#### Fedora32 auditd availability
+
+	[root@fedora32-ssd fedora]# dnf install setroubleshoot setroubleshoot-server
+	Last metadata expiration check: 1:41:08 ago on Tue 28 Jul 2020 11:25:37 AM CEST.
+	Package setroubleshoot-3.3.23-1.fc32.x86_64 is already installed.
+	Package setroubleshoot-server-3.3.23-1.fc32.x86_64 is already installed.
+	Dependencies resolved.
+	Nothing to do.
+	Complete!
+
+	[root@fedora32-ssd fedora]# systemctl restart auditd
+	Failed to restart auditd.service: Operation refused, unit auditd.service may be requested by dependency only (it is configured to refuse manual start/stop).
+	See system logs and 'systemctl status auditd.service' for details.
+
+	[root@fedora32-ssd fedora]# systemctl status auditd.service
+	● auditd.service - Security Auditing Service
+	     Loaded: loaded (/usr/lib/systemd/system/auditd.service; enabled; vendor preset: enabled)
+	     Active: active (running) since Fri 2020-07-24 14:27:07 CEST; 3 days ago
+	       Docs: man:auditd(8)
+	             https://github.com/linux-audit/audit-documentation
+	    Process: 781 ExecStart=/sbin/auditd (code=exited, status=0/SUCCESS)
+	    Process: 788 ExecStartPost=/sbin/augenrules --load (code=exited, status=0/SUCCESS)
+	   Main PID: 783 (auditd)
+	      Tasks: 4 (limit: 14184)
+	     Memory: 2.8M
+	        CPU: 327ms
+	     CGroup: /system.slice/auditd.service
+	             ├─783 /sbin/auditd
+	             └─785 /usr/sbin/sedispatch
+
+	Jul 24 14:27:07 fedora32-ssd systemd[1]: Starting Security Auditing Service...
+	Jul 24 14:27:07 fedora32-ssd auditd[783]: audit dispatcher initialized with q_depth=400 and 1 active plugins
+	Jul 24 14:27:07 fedora32-ssd auditd[783]: Init complete, auditd 3.0 listening for events (startup state enable)
+	Jul 24 14:27:07 fedora32-ssd augenrules[788]: /sbin/augenrules: No change
+	Jul 24 14:27:07 fedora32-ssd augenrules[798]: No rules
+	Jul 24 14:27:07 fedora32-ssd systemd[1]: Started Security Auditing Service.
+	[root@fedora32-ssd fedora]#
+
 ### 23
 
 Use journalctl for listing all logs related to setroubleshoot:
@@ -317,6 +372,33 @@ Use journalctl for listing all logs related to setroubleshoot:
 Use journalctl for listing all logs related to a particular SELinux label. For example:
 
 	# journalctl _SELINUX_CONTEXT=system_u:system_r:policykit_t:s0
+
+#### Fedora32 journalctl _SELINUX_CONTEXT=system_u:system_r:policykit_t:s0 command
+
+	[root@fedora32-ssd fedora]# journalctl _SELINUX_CONTEXT=system_u:system_r:policykit_t:s0
+	-- Logs begin at Mon 2020-07-06 15:58:49 CEST, end at Tue 2020-07-28 14:04:57 CEST. --
+
+	[snap]
+
+	-- Reboot --
+	Jul 23 19:58:41 fedora32-ssd polkitd[980]: Started polkitd version 0.116
+	Jul 23 19:58:41 fedora32-ssd polkitd[980]: Loading rules from directory /etc/polkit-1/rules.d
+	Jul 23 19:58:41 fedora32-ssd polkitd[980]: Loading rules from directory /usr/share/polkit-1/rules.d
+	Jul 23 19:58:42 fedora32-ssd polkitd[980]: Finished loading, compiling and executing 15 rules
+	Jul 23 19:58:42 fedora32-ssd polkitd[980]: Acquired the name org.freedesktop.PolicyKit1 on the system bus
+	Jul 23 19:58:57 fedora32-ssd polkitd[980]: Registered Authentication Agent for unix-session:c1 (system bus name :1.187 [/usr/bin/gnome-shell], object path /org/>
+	Jul 23 20:01:52 fedora32-ssd polkitd[980]: Registered Authentication Agent for unix-session:2 (system bus name :1.229 [/usr/bin/gnome-shell], object path /org/f>
+	Jul 23 20:01:56 fedora32-ssd polkitd[980]: Unregistered Authentication Agent for unix-session:c1 (system bus name :1.187, object path /org/freedesktop/PolicyKit>
+	Jul 24 12:40:51 fedora32-ssd polkitd[980]: Unregistered Authentication Agent for unix-session:2 (system bus name :1.229, object path /org/freedesktop/PolicyKit1>
+	-- Reboot --
+	Jul 24 14:27:07 fedora32-ssd polkitd[961]: Started polkitd version 0.116
+	Jul 24 14:27:08 fedora32-ssd polkitd[961]: Loading rules from directory /etc/polkit-1/rules.d
+	Jul 24 14:27:08 fedora32-ssd polkitd[961]: Loading rules from directory /usr/share/polkit-1/rules.d
+	Jul 24 14:27:08 fedora32-ssd polkitd[961]: Finished loading, compiling and executing 15 rules
+	Jul 24 14:27:08 fedora32-ssd polkitd[961]: Acquired the name org.freedesktop.PolicyKit1 on the system bus
+	Jul 24 14:27:22 fedora32-ssd polkitd[961]: Registered Authentication Agent for unix-session:c1 (system bus name :1.187 [/usr/bin/gnome-shell], object path /org/>
+	Jul 24 14:29:26 fedora32-ssd polkitd[961]: Registered Authentication Agent for unix-session:2 (system bus name :1.229 [/usr/bin/gnome-shell], object path /org/f>
+	Jul 24 14:29:30 fedora32-ssd polkitd[961]: Unregistered Authentication Agent for unix-session:c1 (system bus name :1.187, object path /org/freedesktop/PolicyKit>
 
 ### 25
 

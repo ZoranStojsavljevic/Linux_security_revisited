@@ -19,7 +19,7 @@ The enabling mechanisms are set in the /etc/selinux/config file.
 
 	[root@fedora32-ssd selinux]#
 
-The varialbe SELINUX can have three values, so far known:
+The variable SELINUX can have three values:
 
 	[1] SELINUX=disabled
 	[2] SELINUX=permissive
