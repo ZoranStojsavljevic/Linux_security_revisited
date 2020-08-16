@@ -16,10 +16,10 @@ DAC - Discretionary Access Control	(Pure Linux feature, has nothing to do with S
 MAC - Mandatory Access Control		(SELinux feature)
 
 	$ ls -Z file1
-	###	   DAC	user  group
-	-rw-rw-r--	user1 group1 unconfined_u:object_r:user_home_t:s0		file1
-	###	   MAC			a user	a role	   a type      a level
-	-rw-rw-r--      user1 group1 unconfined_u:object_r:user_home_t:s0               file1
+	###	DAC	user  group
+	-rw-rw-r--	user1 group1 unconfined_u:object_r:user_home_t:s0	file1
+	###	MAC		     a user	  a role   a type      a level
+	-rw-rw-r--	user1 group1 unconfined_u:object_r:user_home_t:s0	file1
 
 DAC - Discretionary Access Control	(pure Linux feature)
 MAC - Mandatory Access Control		(SELinux feature)
@@ -31,10 +31,10 @@ example, when creating a new file in the /etc/ directory that is labeled with th
 inherits the same type:
 
 	$ ls -dZ - /etc/
-	drwxr-xr-x. root root system_u:object_r:etc_t:s0       /etc
+	drwxr-xr-x. root root system_u:object_r:etc_t:s0	/etc
 	# touch /etc/file1
 	# ls -lZ /etc/file1
-	-rw-r--r--. root root unconfined_u:object_r:etc_t:s0   /etc/file1
+	-rw-r--r--. root root unconfined_u:object_r:etc_t:s0	/etc/file1
 
 There are multiple commands for managing the SELinux context for files, such as chcon, semanage fcontext,
 and restorecon.
